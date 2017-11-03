@@ -27,6 +27,8 @@ public:
 
     void addRequirement(ResourceNode* nodePtr);
 
+    std::string getResouce();
+
     bool isUsable() const;
     void setUsable(bool usable);
 

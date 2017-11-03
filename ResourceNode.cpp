@@ -48,6 +48,10 @@ void ResourceNode::addRequirement(ResourceNode* nodePtr) {
     this->requirements.push_back(nodePtr);
 }
 
+std::string ResourceNode::getResouce() {
+    return this->resource;
+}
+
 bool ResourceNode::isUsable() const{
     return this->usable;
 }
