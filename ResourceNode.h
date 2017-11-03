@@ -14,6 +14,8 @@ private:
     bool requirementsSatisfied();
     void notifyRecipients(bool usable);
 
+    bool isRequirement(std::string resource);
+
     void addRecipient(ResourceNode* nodePtr);
 
     bool usable; // Should only return true if this node is usable
@@ -28,6 +30,8 @@ public:
     void addRequirement(ResourceNode* nodePtr);
 
     std::string getResouce();
+
+    std::vector<std::string> getRequirements();
 
     bool isUsable() const;
     void setUsable(bool usable);

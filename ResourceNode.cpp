@@ -23,7 +23,7 @@ ResourceNode::~ResourceNode() {
 
 bool ResourceNode::requirementsSatisfied() {
     for(ResourceNode* nodePtr : this->requirements) {
-        if(!(nodePtr->isUsable())) {
+        if(nodePtr != nullptr && !(nodePtr->isUsable())) {
             return false;
         }
     }
@@ -32,24 +32,42 @@ bool ResourceNode::requirementsSatisfied() {
 
 void ResourceNode::notifyRecipients(bool usable) {
     for(ResourceNode* nodePtr : this->recipients) {
-        std::cout << "Notifying " << nodePtr->toString() << " of changing usability\n";
-        nodePtr->setUsable(usable);
+        if(nodePtr != nullptr) {
+            nodePtr->setUsable(usable);
+        }
     }
 }
 
+bool ResourceNode::isRequirement(std::string resource) {
+    for(ResourceNode* nodePtr : this->requirements) {
+        if(nodePtr != nullptr && nodePtr->getResouce().compare(resource) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void ResourceNode::addRecipient(ResourceNode* nodePtr) {
-    std::cout << this->toString() << " supplys " << nodePtr->toString() << "\n";
     this->recipients.push_back(nodePtr);
 }
 
 void ResourceNode::addRequirement(ResourceNode* nodePtr) {
-    std::cout << this->toString() << " requires " << nodePtr->toString() << " to be avaliable\n";
-    nodePtr->addRecipient(this);
-    this->requirements.push_back(nodePtr);
+    if(!this->isRequirement(nodePtr->getResouce())) {
+        nodePtr->addRecipient(this);
+        this->requirements.push_back(nodePtr);
+    }
 }
 
 std::string ResourceNode::getResouce() {
     return this->resource;
+}
+
+std::vector<std::string> ResourceNode::getRequirements() {
+    std::vector<std::string> requiredResouces;
+    for(ResourceNode* nodePtr : this->requirements) {
+        requiredResouces.push_back(nodePtr->getResouce());
+    }
+    return requiredResouces;
 }
 
 bool ResourceNode::isUsable() const{
