@@ -65,7 +65,7 @@ std::string ResourceNode::getResouce() {
 std::vector<std::string> ResourceNode::getRequirements() {
     std::vector<std::string> requiredResouces;
     for(ResourceNode* nodePtr : this->requirements) {
-        requiredResouces.push_back(nodePtr->getResouce());
+        requiredResouces.push_back(nodePtr->toString());
     }
     return requiredResouces;
 }
