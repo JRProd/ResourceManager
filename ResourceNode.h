@@ -25,18 +25,16 @@ public:
     ResourceNode(std::string resource);
     ResourceNode(std::string resource, bool usable);
 
-    ~ResourceNode();
-
     void addRequirement(ResourceNode* nodePtr);
 
-    std::string getResouce();
+    std::string getResouce() const;
 
-    std::vector<std::string> getRequirements();
+    std::vector<const ResourceNode*> getRequirements() const;
 
     bool isUsable() const;
     void setUsable(bool usable);
 
-    std::string toString();
+    std::string toString() const;
 };
 
 #endif

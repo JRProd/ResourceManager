@@ -12,15 +12,6 @@ ResourceNode::ResourceNode(std::string resource, bool usable) {
     this->usable = usable;
 }
 
-ResourceNode::~ResourceNode() {
-    for(int i = 0; i < requirements.size(); i++) {
-        ResourceNode* nodePtr = this->requirements.at(i);
-        if(nodePtr != nullptr) {
-            delete nodePtr;
-        }
-    }
-}
-
 bool ResourceNode::requirementsSatisfied() {
     for(ResourceNode* nodePtr : this->requirements) {
         if(nodePtr != nullptr && !(nodePtr->isUsable())) {
@@ -58,16 +49,17 @@ void ResourceNode::addRequirement(ResourceNode* nodePtr) {
     }
 }
 
-std::string ResourceNode::getResouce() {
+std::string ResourceNode::getResouce() const {
     return this->resource;
 }
 
-std::vector<std::string> ResourceNode::getRequirements() {
-    std::vector<std::string> requiredResouces;
+std::vector<const ResourceNode*> ResourceNode::getRequirements() const {
+    std::vector<const ResourceNode*> constVector;
     for(ResourceNode* nodePtr : this->requirements) {
-        requiredResouces.push_back(nodePtr->toString());
+        const ResourceNode* constPtr = nodePtr;
+        constVector.push_back(constPtr);
     }
-    return requiredResouces;
+    return constVector;
 }
 
 bool ResourceNode::isUsable() const{
@@ -82,7 +74,7 @@ void ResourceNode::setUsable(bool usable) {
     }
 }
 
-std::string ResourceNode::toString() {
+std::string ResourceNode::toString() const {
     std::string returnVal = this->resource + "(";
     returnVal += this->isUsable() ? "1" : "0";
     returnVal += ")";
