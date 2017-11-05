@@ -110,6 +110,7 @@ std::string ResourceManager::toString(bool asMatrix) const {
         // int gridSize = maxResouceLength*(this->nodes.size() + 1) + 3*this->nodes.size();
 
         // Generate the top left space of grid
+        returnVal += "> Node(usable): 1=Usable, 0=Not Usable\n";
         returnVal += "> ";
         for(int i = 0; i < maxResouceLength; i++) {
             returnVal += " ";
