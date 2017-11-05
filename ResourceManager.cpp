@@ -123,7 +123,6 @@ std::string ResourceManager::toString(bool asMatrix) const {
         }
         returnVal += "\n";
 
-        returnVal += "> ";
         returnVal += this->generateGraphBreak(maxResouceLength, this->nodes.size());
         for(ResourceNode* nodeLabelPtr : this->nodes) {
             // Generates the label for this row
