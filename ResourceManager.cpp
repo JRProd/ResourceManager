@@ -44,6 +44,7 @@ std::string ResourceManager::generateGraphBlock(int maxResouceLength, std::strin
 
 std::string ResourceManager::generateGraphBreak(int maxResouceLength, int numOfResources) const {
     std::string returnVal;
+    returnVal += "> ";
     for(int i = 0; i < numOfResources + 1; i++) {
         for(int j = 0; j < maxResouceLength; j++) {
             returnVal += "-";
@@ -98,33 +99,34 @@ void ResourceManager::deleteNode(std::string resource) {
 std::string ResourceManager::toString(bool asMatrix) const {
     std::string returnVal;
     if(asMatrix) { // Print adjecentcy matrix
-        std::vector<std::string> resources;
         int maxResouceLength = 0;
         for(ResourceNode* nodePtr : this->nodes) {
             if(nodePtr->toString().length() > maxResouceLength) {
                 maxResouceLength = nodePtr->toString().length();
             }
-            resources.push_back(nodePtr->getResouce());
         }
                        // Each grid slot same size as max resource. Separated by ' | '.
                        //  There must also be a slot for the vertical labels.
         // int gridSize = maxResouceLength*(this->nodes.size() + 1) + 3*this->nodes.size();
 
         // Generate the top left space of grid
+        returnVal += "> ";
         for(int i = 0; i < maxResouceLength; i++) {
             returnVal += " ";
         }
         returnVal += " | ";
 
         // Add labels to the grid slots
-        for(std::string resource : resources) {
-            returnVal += this->generateGraphBlock(maxResouceLength, resource);
+        for(ResourceNode* nodePtr : this->nodes) {
+            returnVal += this->generateGraphBlock(maxResouceLength, nodePtr->getResouce());
         }
         returnVal += "\n";
 
+        returnVal += "> ";
         returnVal += this->generateGraphBreak(maxResouceLength, this->nodes.size());
         for(ResourceNode* nodeLabelPtr : this->nodes) {
             // Generates the label for this row
+            returnVal += "> ";
             returnVal += this->generateGraphBlock(maxResouceLength, nodeLabelPtr->toString());
             std::vector<const ResourceNode*> requirements = nodeLabelPtr->getRequirements();
             for(ResourceNode* nodePtr : this->nodes) {
@@ -144,9 +146,20 @@ std::string ResourceManager::toString(bool asMatrix) const {
             returnVal += this->generateGraphBreak(maxResouceLength, this->nodes.size());
         }
     } else { // Print list of requirements for each node
+        int maxResouceLength = 9;
         for(ResourceNode* nodePtr : this->nodes) {
-            returnVal += nodePtr->toString();
-            returnVal += " | ";
+            if(nodePtr->toString().length() > maxResouceLength) {
+                maxResouceLength = nodePtr->toString().length();
+            }
+        }
+
+        returnVal += "> ";
+        returnVal += this->generateGraphBlock(maxResouceLength, "Resources");
+        returnVal += "Requirements for the resources. Node(usable): 1=Usable, 0=Not Usable\n";
+
+        for(ResourceNode* nodePtr : this->nodes) {
+            returnVal += "> ";
+            returnVal += this->generateGraphBlock(maxResouceLength, nodePtr->toString());
             for(const ResourceNode* requirementPtr : nodePtr->getRequirements()) {
                 returnVal += requirementPtr->toString() + " ";
             }
