@@ -1,0 +1,11 @@
+Turrent Gun
+Gun Bullets
+Bullets Gunpowder
+Bullets Ore
+Tank Ore
+Tank Bullets
+Tank Turrent
+Tank Gas
+Food Wheat
+Food Meat
+Tank Men
