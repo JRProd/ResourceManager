@@ -1,8 +1,17 @@
+/* ########## RESOURCE MANAGER APPLICATION ##########
+ * The ResourceNode module is used to store the resource
+ *  and its requirements. The usable bit is updated based
+ *  on requirements and the current usable bit
+ *
+ * Aurthor - Jake Rowland
+ * Date - November 5, 2107
+*/
+
 #ifndef RESOURCE_NODE
     #define RESOURCE_NODE
 
-#include <string>
-#include <vector>
+#include <string> // For the resouce
+#include <vector> // For list of requirements
 
 class ResourceNode {
 private:

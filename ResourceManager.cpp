@@ -1,7 +1,5 @@
 #include "ResourceManager.h"
 
-#include <iostream>
-
 ResourceManager::ResourceManager() {
 
 }
@@ -14,6 +12,7 @@ ResourceManager::~ResourceManager() {
     }
 }
 
+// Find node from the list of nodes added
 ResourceNode* ResourceManager::findNode(std::string resource) {
     for(ResourceNode* nodePtr : nodes) {
         if (nodePtr != nullptr && nodePtr->getResouce().compare(resource) == 0) {
@@ -23,6 +22,7 @@ ResourceNode* ResourceManager::findNode(std::string resource) {
     return nullptr;
 }
 
+// Aligns the resource into middle of a graph block
 std::string ResourceManager::generateGraphBlock(int maxResouceLength, std::string resource) const {
     std::string returnVal;
     int diff = maxResouceLength - resource.size();
@@ -42,13 +42,18 @@ std::string ResourceManager::generateGraphBlock(int maxResouceLength, std::strin
     return returnVal;
 }
 
+// Generates the horizontal breaks in the graph
 std::string ResourceManager::generateGraphBreak(int maxResouceLength, int numOfResources) const {
     std::string returnVal;
     returnVal += "> ";
+    // For the left open slot and the number of resources
     for(int i = 0; i < numOfResources + 1; i++) {
+        // For the maxResouceLength
         for(int j = 0; j < maxResouceLength; j++) {
+            // Add the line breaks
             returnVal += "-";
         }
+        // Add the vertical breaks
         if(i == numOfResources) {
             returnVal += "-|";
         } else {
@@ -90,8 +95,10 @@ void ResourceManager::addNode(std::string resource, std::string requirement) {
 }
 
 void ResourceManager::deleteNode(std::string resource) {
+    // Find the node
     ResourceNode* resourceNode = this->findNode(resource);
     if(resourceNode != nullptr) {
+        // Set usable to false
         resourceNode->setUsable(false);
     }
 }
@@ -99,15 +106,13 @@ void ResourceManager::deleteNode(std::string resource) {
 std::string ResourceManager::toString(bool asMatrix) const {
     std::string returnVal;
     if(asMatrix) { // Print adjecentcy matrix
+        // Get largest resource
         int maxResouceLength = 0;
         for(ResourceNode* nodePtr : this->nodes) {
             if(nodePtr->toString().length() > maxResouceLength) {
                 maxResouceLength = nodePtr->toString().length();
             }
         }
-                       // Each grid slot same size as max resource. Separated by ' | '.
-                       //  There must also be a slot for the vertical labels.
-        // int gridSize = maxResouceLength*(this->nodes.size() + 1) + 3*this->nodes.size();
 
         // Generate the top left space of grid
         returnVal += "> Node(usable): 1=Usable, 0=Not Usable\n";
@@ -129,15 +134,18 @@ std::string ResourceManager::toString(bool asMatrix) const {
             returnVal += "> ";
             returnVal += this->generateGraphBlock(maxResouceLength, nodeLabelPtr->toString());
             std::vector<const ResourceNode*> requirements = nodeLabelPtr->getRequirements();
+            // For all nodes in added
             for(ResourceNode* nodePtr : this->nodes) {
                 bool nodeIsRequirement = false;
                 for(const ResourceNode* requiredNode : requirements) {
                     if(nodePtr->getResouce().compare(requiredNode->getResouce()) == 0) { // If a node is a required node of the current labelNode
+                        // Generate graph block for nodes that are required
                         returnVal += this->generateGraphBlock(maxResouceLength, "1");
                         nodeIsRequirement = true;
                         break;
                     }
                 }
+                // Generate graph block for nodes not required
                 if(!nodeIsRequirement) {
                     returnVal += this->generateGraphBlock(maxResouceLength, "0");
                 }
@@ -146,6 +154,7 @@ std::string ResourceManager::toString(bool asMatrix) const {
             returnVal += this->generateGraphBreak(maxResouceLength, this->nodes.size());
         }
     } else { // Print list of requirements for each node
+        // Get max resource length larger then 'Resources'
         int maxResouceLength = 9;
         for(ResourceNode* nodePtr : this->nodes) {
             if(nodePtr->toString().length() > maxResouceLength) {
@@ -157,6 +166,7 @@ std::string ResourceManager::toString(bool asMatrix) const {
         returnVal += this->generateGraphBlock(maxResouceLength, "Resources");
         returnVal += "Requirements for the resources. Node(usable): 1=Usable, 0=Not Usable\n";
 
+        // For all the nodes, print the node and then requirements
         for(ResourceNode* nodePtr : this->nodes) {
             returnVal += "> ";
             returnVal += this->generateGraphBlock(maxResouceLength, nodePtr->toString());

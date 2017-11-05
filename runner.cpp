@@ -1,3 +1,11 @@
+/* ########## RESOURCE MANAGER APPLICATION ##########
+ * The UI runner for the Resource Manager Application.
+ *  Manages the user input and adding/deleting nodes.
+ *
+ * Aurthor - Jake Rowland
+ * Date - November 5, 2107
+*/
+
 #include <fstream>
 #include <iostream>
 
@@ -12,13 +20,17 @@ int main(int argc, char const *argv[]) {
     std::cout << "< ##################################################\n";
     std::cout << "< (Q)uit to leave program\n<\n";
 
+    // Open generic file
     std::ifstream inputFile;
     inputFile.open("resource.txt", std::ios::in);
 
+    // If file does not exist
     if(!inputFile.good()) {
         std::string fileUrl;
+        // Get file from command line arguments
         if(argc >= 2) {
             fileUrl = argv[1];
+        // Get file from user input
         } else {
             std::cout << "< Please enter the file to read the resources from.\n";
             std::cout << "> ";
@@ -30,9 +42,10 @@ int main(int argc, char const *argv[]) {
         }
     }
 
-
+    // Define ResourceManager
     ResourceManager manager;
 
+    // Get resources from file
     while(inputFile.good()) {
         std::string resourceLine;
         getline(inputFile, resourceLine, '\n');
@@ -45,12 +58,14 @@ int main(int argc, char const *argv[]) {
         }
     }
 
+    // Prompt user on how to show output
     std::cout << "< Would you like (L)ist of requirements for a resource, or\n";
     std::cout << "< a adjacency (M)atrix?\n";
 
 
     std::string cmd;
     bool writeList = false;
+    // Get user command
     do {
         std::cout << "> ";
         std::cin >> cmd;
@@ -68,6 +83,7 @@ int main(int argc, char const *argv[]) {
         }
     } while(true);
 
+    // Add or delete node commands
     do {
         std::cout << manager.toString(writeList);
         std::cout << "< (A)dd or (D)elete a node\n";
